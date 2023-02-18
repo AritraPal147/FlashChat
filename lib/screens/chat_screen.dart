@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
@@ -15,6 +17,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   // User variable that stores the logged in user.
   late User loggedInUser;
+
 
   @override
   void initState() {
@@ -49,7 +52,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                //Implement logout functionality
+                //Implements logout functionality
+                _auth.signOut();
+                exit(0);
               }),
         ],
         title: const Text('⚡️Chat'),
