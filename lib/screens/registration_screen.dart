@@ -47,6 +47,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 48.0,
               ),
+
+              // TextField for email address
               TextField(
                 onChanged: (value) {
                   // Stores the value input inside the TextField into email variable
@@ -60,6 +62,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 8.0,
               ),
+
+              // TextField for password
               TextField(
                 onChanged: (value) {
                   // Stores the value input inside the TextField into password variable
@@ -75,6 +79,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 24.0,
               ),
+
+              // Registration Button
               RoundedButton(
                 colour: Colors.blueAccent,
                 title: 'Register',
@@ -101,7 +107,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     // TODO: Implement registration error handling such as already existing user
                     print(e);
                   }
-                  },
+                },
               ),
             ],
           ),

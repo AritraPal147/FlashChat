@@ -46,6 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 48.0,
               ),
+
+              // TextField for email id
               TextField(
                 onChanged: (value) {
                   // Stores the value input inside the TextField into email variable
@@ -59,6 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 8.0,
               ),
+
+              // TextField for password
               TextField(
                 onChanged: (value) {
                   // Stores the value input inside the TextField into password variable
@@ -74,6 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 24.0,
               ),
+
+              // Login Button
               RoundedButton(
                 colour: Colors.lightBlueAccent,
                 title: 'Login',

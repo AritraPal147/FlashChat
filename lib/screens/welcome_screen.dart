@@ -99,6 +99,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       child: Image.asset('images/logo.png'),
                     ),
                 ),
+
+                // Flash Chat Title
                 AnimatedTextKit(
                   animatedTexts: [
                     // Flash Chat text animator (Typewriter animation)
@@ -115,11 +117,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
               ],
             ),
+
             // Provides space between the heading and buttons
             const SizedBox(
               height: 48.0,
             ),
+
             // RoundedButton is a self defined class
+            // Login Button
             RoundedButton(
               title: 'Login',
               colour: Colors.lightBlueAccent,
@@ -128,6 +133,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
+
+            // Registration Button
             RoundedButton(
               title: 'Register',
               colour: Colors.blueAccent,

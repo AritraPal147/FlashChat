@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
@@ -15,9 +16,12 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   // Firebase authentication variable
   final _auth = FirebaseAuth.instance;
+  // Variable that connects us to the Firebase Firestore database
+  final _fireStore = FirebaseFirestore.instance;
   // User variable that stores the logged in user.
   late User loggedInUser;
-
+  // String variable that stores the message that the user types
+  late String messageText;
 
   @override
   void initState() {
@@ -49,6 +53,8 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
+
+          // Logout Button
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
@@ -72,17 +78,26 @@ class _ChatScreenState extends State<ChatScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
+
+                    // TextField for user entered messages
                     child: TextField(
                       onChanged: (value) {
-                        //Do something with the user input.
+                        // Assign the value of TextField to message variable
+                        messageText = value;
                       },
                       // Custom decoration from constants.dart
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
+
+                  // Send Button
                   TextButton(
                     onPressed: () {
-                      //Implement send functionality.
+                      // Send the messageText + email to the Firestore database
+                      _fireStore.collection('messages').add({
+                        'text': messageText,
+                        'sender': loggedInUser.email,
+                      });
                     },
                     child: const Text(
                       'Send',
