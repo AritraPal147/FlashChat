@@ -11,20 +11,27 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  // Firebase authentication variable
   final _auth = FirebaseAuth.instance;
+  // User variable that stores the logged in user.
   late User loggedInUser;
 
   @override
   void initState() {
     super.initState();
 
+    // Calls getCurrentUser() method.
     getCurrentUser();
   }
 
   void getCurrentUser() async {
     try {
+      // Stores currentUser in temporary variable user
       final user = _auth.currentUser;
+
+      // Checks if currentUser in not null
       if (user != null) {
+        // Stores user in loggedInUser variable
         loggedInUser = user;
         print(loggedInUser.email);
       }
@@ -54,6 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
+              // Custom decoration from constants.dart
               decoration: kMessageContainerDecoration,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,6 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onChanged: (value) {
                         //Do something with the user input.
                       },
+                      // Custom decoration from constants.dart
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
@@ -72,6 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                     child: const Text(
                       'Send',
+                      // Custom style from constants.dart
                       style: kSendButtonTextStyle,
                     ),
                   ),

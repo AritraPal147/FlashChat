@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
+// Constant for Send Button Text Style
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
 
+// Constant for Message Text Field Decoration
 const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   hintText: 'Type your message here...',
   border: InputBorder.none,
 );
 
+// Constant for Message Container Decoration
 const kMessageContainerDecoration = BoxDecoration(
   border: Border(
     top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),

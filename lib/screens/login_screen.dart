@@ -13,9 +13,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late String email;
-  late String password;
+  // Firebase authentication variable
   final _auth = FirebaseAuth.instance;
+
+  // Variable to store the user input email.
+  late String email;
+  // Variable to store the user input password.
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            // Hero provides simple movement animation of our flash chat logo
             Hero(
               tag: 'logo',
               child: SizedBox(
@@ -38,22 +43,28 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
-              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
+                // Stores the value input inside the TextField into email variable
                 email = value;
               },
+              // Custom TextField decoration from constants.dart
               decoration: kTextFieldDecoration,
+              // Changes the keyboard to email type keyboard, i.e., adds @ to the keyboard bottom row
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(
               height: 8.0,
             ),
             TextField(
               onChanged: (value) {
+                // Stores the value input inside the TextField into password variable
                 password = value;
               },
+              // Custom TextField decoration from constants.dart, with changes hintText
               decoration: kTextFieldDecoration.copyWith(
-                hintText: 'Enter your password'
+                hintText: 'Enter you password',
               ),
+              // Password shows up in screen obscured, i.e., dots are shown in TextField
               obscureText: true,
             ),
             const SizedBox(
@@ -64,9 +75,11 @@ class _LoginScreenState extends State<LoginScreen> {
               title: 'Login',
               onPressed: () async {
                 try {
+                  // Sign in with input email and password
                   await _auth.signInWithEmailAndPassword(
                       email: email, password: password);
                   if (context.mounted) {
+                    // Navigate to chat screen after login
                     Navigator.pushNamed(context, ChatScreen.id);
                   }
                 } catch (e) {
