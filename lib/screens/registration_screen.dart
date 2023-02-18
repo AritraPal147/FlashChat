@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/lib/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -11,6 +13,10 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,20 +39,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             TextField(
               onChanged: (value) {
-                //Do something with the user input.
+                email = value;
               },
               decoration: kTextFieldDecoration,
+              keyboardType: TextInputType.emailAddress,
               ),
             const SizedBox(
               height: 8.0,
             ),
             TextField(
               onChanged: (value) {
-                //Do something with the user input.
+                password = value;
               },
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Enter you password',
               ),
+              obscureText: true,
             ),
             const SizedBox(
               height: 24.0,
@@ -54,7 +62,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             RoundedButton(
               colour: Colors.blueAccent,
               title: 'Register',
-              onPressed: () {},
+              onPressed: () async {
+                // TODO: Check password size >= 6 characters
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                } catch (e) {
+                  // TODO: Implement registration error handling such as already existing user
+                  print(e);
+                }
+                },
             ),
           ],
         ),
