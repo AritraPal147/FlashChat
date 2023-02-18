@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/lib/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late String email;
   late String password;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,18 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
               colour: Colors.lightBlueAccent,
               title: 'Login',
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  await _auth.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                } catch (e) {
+                  // TODO: Implement exception handling.
+                  print(e);
+                }
+              },
             ),
           ],
         ),

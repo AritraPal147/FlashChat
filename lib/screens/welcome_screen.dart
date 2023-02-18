@@ -16,64 +16,66 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
 
   // Controller variable that controls animation
-  late AnimationController controller;
-  /// Animation variable
+  // late AnimationController controller;
   // late Animation animation;
 
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-        duration: const Duration(seconds: 1),
-        vsync: this,
-    );
-    // controller.value is a float between 0 and 1 by default
-
-    /// For curved animation
-    // animation = CurvedAnimation(
-    //     parent: controller,
-    //     curve: Curves.easeIn
-    // );
-
-    /// For background color changing animation (Tween -> In between animations)
-    // Background animated from red color initially to blue color
-    // animation = ColorTween(begin: Colors.red, end: Colors.blue).animate(controller);
-
-    controller.forward();
-    // Increases controller variable value from 0 to 1 linearly
-    // controller.reverse(from: 1.0); will reduce value of controller from 1 to 0.
-
-    /// TO add looping:
-    // animation.addStatusListener((status) {
-    //   // Checks if animation is completed or not (reached maximum size)
-    //   if (status == AnimationStatus.completed) {
-    //     // Reverses direction of controller so that animation goes in reverse order
-    //     controller.reverse(from: 1.0);
-    //   }
-    //   // Checks if animation is dismissed or not (reached minimum size)
-    //   else if (status == AnimationStatus.dismissed) {
-    //     // Makes controller count forward
-    //     controller.forward();
-    //   }
-    // });
-
-    controller.addListener(() {
-      // setState() is used to make Flutter recognise changes in animation due to
-      // change in value of controller.value and animation.value.
-      setState(() {});
-      // print(animation.value);
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    // Disposes the controller when the welcome screen is dismissed.
-    // If controller is not disposed then the animation will continue running in the
-    // background even after the the welcome screen is dismissed.
-    super.dispose();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   /// Controller for animation
+  //   // controller = AnimationController(
+  //   //     duration: const Duration(seconds: 1),
+  //   //     vsync: this,
+  //   // );
+  //   // controller.value is a float between 0 and 1 by default
+  //
+  //   /// For curved animation
+  //   // animation = CurvedAnimation(
+  //   //     parent: controller,
+  //   //     curve: Curves.easeIn
+  //   // );
+  //
+  //   /// For background color changing animation (Tween -> In between animations)
+  //   // Background animated from red color initially to blue color
+  //   // animation = ColorTween(begin: Colors.red, end: Colors.blue).animate(controller);
+  //
+  //   // controller.forward();
+  //   // Increases controller variable value from 0 to 1 linearly
+  //   // controller.reverse(from: 1.0); will reduce value of controller from 1 to 0.
+  //
+  //   /// TO add looping:
+  //   // animation.addStatusListener((status) {
+  //   //   // Checks if animation is completed or not (reached maximum size)
+  //   //   if (status == AnimationStatus.completed) {
+  //   //     // Reverses direction of controller so that animation goes in reverse order
+  //   //     controller.reverse(from: 1.0);
+  //   //   }
+  //   //   // Checks if animation is dismissed or not (reached minimum size)
+  //   //   else if (status == AnimationStatus.dismissed) {
+  //   //     // Makes controller count forward
+  //   //     controller.forward();
+  //   //   }
+  //   // });
+  //
+  //   /// For animation
+  // //   controller.addListener(() {
+  // //     // setState() is used to make Flutter recognise changes in animation due to
+  // //     // change in value of controller.value and animation.value.
+  // //     setState(() {});
+  // //     // print(animation.value);
+  // //   });
+  // // }
+  //
+  // /// TO dispose the animation
+  // // @override
+  // // void dispose() {
+  // //   controller.dispose();
+  // //   // Disposes the controller when the welcome screen is dismissed.
+  // //   // If controller is not disposed then the animation will continue running in the
+  // //   // background even after the the welcome screen is dismissed.
+  // //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           children: <Widget>[
             Row(
               children: <Widget>[
+                // Hero provides simple movement animation of our flash chat logo
                 Hero(
                     tag: 'logo',
                     child: Container(
@@ -98,6 +101,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
                 AnimatedTextKit(
                   animatedTexts: [
+                    // Flash Chat text animator (Typewriter animation)
                     TypewriterAnimatedText(
                       'Flash Chat',
                       speed: const Duration(milliseconds: 100),
@@ -111,13 +115,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
               ],
             ),
+            // Provides space between the heading and buttons
             const SizedBox(
               height: 48.0,
             ),
+            // RoundedButton is a self defined class
             RoundedButton(
               title: 'Login',
               colour: Colors.lightBlueAccent,
               onPressed: () {
+                // Navigates to Login Screen when button is pressed
                 Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
@@ -125,6 +132,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'Register',
               colour: Colors.blueAccent,
               onPressed: () {
+                // Navigates to Registration Screen when button is pressed
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
             )

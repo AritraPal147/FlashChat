@@ -13,8 +13,12 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  // Firebase authentication variable
   final _auth = FirebaseAuth.instance;
+
+  // Variable to store the user input email.
   late String email;
+  // Variable to store the user input password.
   late String password;
 
   @override
@@ -27,6 +31,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            // Hero provides simple movement animation of our flash chat logo
             Hero(
               tag: 'logo',
               child: SizedBox(
@@ -39,9 +44,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             TextField(
               onChanged: (value) {
+                // Stores the value input inside the TextField into email variable
                 email = value;
               },
+              // Custom TextField decoration from constants.dart
               decoration: kTextFieldDecoration,
+              // Changes the keyboard to email type keyboard, i.e., adds @ to the keyboard bottom row
               keyboardType: TextInputType.emailAddress,
               ),
             const SizedBox(
@@ -49,11 +57,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             TextField(
               onChanged: (value) {
+                // Stores the value input inside the TextField into password variable
                 password = value;
               },
+              // Custom TextField decoration from constants.dart, with changes hintText
               decoration: kTextFieldDecoration.copyWith(
                 hintText: 'Enter you password',
               ),
+              // Password shows up in screen obscured, i.e., dots are shown in TextField
               obscureText: true,
             ),
             const SizedBox(
@@ -65,9 +76,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               onPressed: () async {
                 // TODO: Check password size >= 6 characters
                 try {
-                  final newUser = await _auth.createUserWithEmailAndPassword(
+                  // Creates user with given email and password
+                  await _auth.createUserWithEmailAndPassword(
                       email: email, password: password);
                   if (context.mounted) {
+                    // Navigate to Chat Screen when new user is created.
                     Navigator.pushNamed(context, ChatScreen.id);
                   }
                 } catch (e) {
