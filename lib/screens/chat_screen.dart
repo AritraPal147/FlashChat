@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,8 @@ import 'package:flash_chat/constants.dart';
 
 // Variable that connects us to the Firebase Firestore database
 final _fireStore = FirebaseFirestore.instance;
+// User variable that stores the logged in user.
+late User loggedInUser;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -21,10 +22,10 @@ class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   // Firebase authentication variable
   final _auth = FirebaseAuth.instance;
-  // User variable that stores the logged in user.
-  late User loggedInUser;
+
   // String variable that stores the message that the user types
   late String messageText;
+  // Firestore.instance.collection(CollectionName).document(Timestamp.now()).setData(messageMap);
 
   @override
   void initState() {
@@ -50,16 +51,6 @@ class _ChatScreenState extends State<ChatScreen> {
       print(e);
     }
   }
-
-  // Returns a stream of all messages (Future objects) in the database
-  // void messageStream() async {
-  //   // Method gets called whenever the database is updated
-  //   await for (var snapshot in _fireStore.collection('messages').snapshots()) {
-  //     for (var message in snapshot.docs) {
-  //       print(message.data());
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +87,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-
                     // TextField for user entered messages
                     child: TextField(
                       controller: messageTextController,
@@ -118,6 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _fireStore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedInUser.email,
+                        'timestamp': Timestamp.now(),
                       });
                     },
                     child: const Text(
@@ -144,7 +135,7 @@ class MessageBuilder extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       // stream is a QuerySnapshot ->
       // Contains the results of a query. It can contain zero or more DocumentSnapshot objects.
-      stream: _fireStore.collection('messages').snapshots(),
+      stream: _fireStore.collection('messages').orderBy('timestamp', descending: true).snapshots(),
       // snapshot is an AsyncSnapshot ->
       // An immutable representation of the most recent interaction with an
       // asynchronous computation.
@@ -164,9 +155,13 @@ class MessageBuilder extends StatelessWidget {
         late String msgText;
         // String that stores message sender received from the Stream
         late String msgSender;
+
         for (var message in messages) {
           // Converts the message.data() object into a Map of strings
           final messageMap = message.data() as Map<String, dynamic>;
+          // Stores email of current user
+          final currentUser = loggedInUser.email;
+
           messageMap.forEach((key, value) {
             if (key == 'sender') {
               // If sender data is present, put value into msgSender
@@ -176,13 +171,19 @@ class MessageBuilder extends StatelessWidget {
               msgText = value;
             }
           });
+
           // Creates a Text widget using the text and sender fetched from Firebase
-          final messageBubble = MessageBubble(sender: msgSender, text: msgText);
+          final messageBubble = MessageBubble(
+              sender: msgSender,
+              text: msgText,
+              isMe: currentUser == msgSender);
           messageBubbles.add(messageBubble);
         }
         // Adds all the Text widgets to the screen in a column.
         return Expanded(
           child: ListView(
+            // Sticks the bottom of the listview to the top of virtual keyboard
+            reverse: true,
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             children: messageBubbles,
           ),
@@ -194,21 +195,23 @@ class MessageBuilder extends StatelessWidget {
 
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({
+  MessageBubble({
     super.key, 
     required this.sender, 
-    required this.text
+    required this.text,
+    required this.isMe,
   });
-  
+
   final String sender;
   final String text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
             sender,
@@ -218,15 +221,25 @@ class MessageBubble extends StatelessWidget {
             ),
           ),
           Material(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: isMe
+                ? const BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
+            )
+              : const BorderRadius.only(
+              topRight: Radius.circular(30.0),
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
+            ),
               elevation: 5.0,
-              color: Colors.lightBlueAccent,
+              color: isMe ? Colors.white : Colors.lightBlueAccent,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 child: Text(
                     text,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: isMe ? Colors.black: Colors.white,
                     fontSize: 15.0
                   ),
                 ),
