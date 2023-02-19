@@ -20,11 +20,8 @@ class FlashChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData.dark().copyWith(
-      //   textTheme: const TextTheme(
-      //     bodyLarge: TextStyle(color: Colors.black54),
-      //   ),
-      // ),
+      // Removes the debug banner
+      debugShowCheckedModeBanner: false,
 
       // Navigates to Welcome screen when the app is opened
       initialRoute: WelcomeScreen.id,
