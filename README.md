@@ -1,3 +1,3 @@
 # Flash Chat
 
-A simple chat app made using Flutter and Firebase
+A simple demo group chat app made using Flutter and Firebase.
